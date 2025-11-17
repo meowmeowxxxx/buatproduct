@@ -35,7 +35,7 @@ export default function ProductDetailPage() {
           </div>
           <h1 className='text-2xl font-bold text-stone-900 mb-3'>Product Not Found</h1>
           <p className='text-stone-600 mb-6'>
-            This product doesn't exist yet. Be the first to launch on BuatProduct!
+            This product doesn&apos;t exist yet. Be the first to launch on BuatProduct!
           </p>
           <div className='flex gap-3 justify-center'>
             <Link href='/'>

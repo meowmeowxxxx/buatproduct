@@ -207,7 +207,7 @@ export default function PricingPage() {
             Still have questions?
           </h2>
           <p className='text-stone-600 mb-8'>
-            Our team is here to help. Get in touch and we'll respond within 24 hours.
+            Our team is here to help. Get in touch and we&apos;ll respond within 24 hours.
           </p>
           <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
             <Link href='/contact'>
