@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
 
 const pricingPlans = [
@@ -32,20 +33,20 @@ const pricingPlans = [
     badgeColor: 'bg-gradient-to-r from-orange-500 to-pink-500 text-white',
     price: '$29',
     originalPrice: null,
-    period: '/month',
+    period: '/per launch',
     description: 'For serious makers who want maximum visibility',
     features: [
       { text: 'Submit unlimited products', included: true, highlight: true },
       { text: 'Featured on homepage for 15 days', included: true, highlight: true },
       { text: 'Reviewed & listed under 24 hours', included: true, highlight: true },
       { text: 'Priority support', included: true },
-      { text: 'Premium "Launched on BuatProduct" badge', included: true },
+      { text: 'Premium "Featured on BuatProduct" badge', included: true },
       { text: 'Advanced analytics & insights', included: true },
       { text: 'Custom product page design', included: true },
       { text: 'Share across all social channels', included: true },
     ],
-    cta: 'Upgrade to Premium',
-    ctaSubtext: 'Billed monthly, cancel anytime',
+    cta: 'Get Premium Launch',
+    ctaSubtext: 'One-time payment per product',
     popular: true,
   },
 ];
@@ -53,47 +54,7 @@ const pricingPlans = [
 export default function PricingPage() {
   return (
     <div className='min-h-screen bg-stone-50'>
-      {/* Header */}
-      <header className='fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-stone-200'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex items-center justify-between h-16'>
-            <Link href='/' className='flex items-center gap-2'>
-              <div className='w-8 h-8 bg-gradient-to-br from-orange-500 to-pink-500 rounded-lg flex items-center justify-center shadow-lg shadow-orange-500/30'>
-                <svg className='w-5 h-5 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2.5} d='M12 6v6m0 0v6m0-6h6m-6 0H6' />
-                  <circle cx='12' cy='12' r='10' strokeWidth={2.5} />
-                </svg>
-              </div>
-              <span className='text-lg font-semibold text-stone-800'>BuatProduct</span>
-            </Link>
-            
-            <nav className='hidden md:flex items-center gap-8'>
-              <Link href='/products' className='text-sm text-stone-600 hover:text-orange-600 transition-colors font-medium'>
-                Products
-              </Link>
-              <Link href='/pricing' className='text-sm text-orange-600 font-medium'>
-                Pricing
-              </Link>
-              <Link href='/past-launches' className='text-sm text-stone-600 hover:text-orange-600 transition-colors font-medium'>
-                Past Launches
-              </Link>
-            </nav>
-            
-            <div className='flex items-center gap-3'>
-              <Link href='/login'>
-                <Button variant='ghost' size='sm' className='text-sm text-stone-600 hover:text-orange-600'>
-                  Sign in
-                </Button>
-              </Link>
-              <Link href='/signup'>
-                <Button size='sm' className='bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white text-sm px-4 shadow-lg shadow-orange-500/30'>
-                  Get Started
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero */}
       <section className='bg-gradient-to-b from-white to-stone-50 border-b border-stone-200'>
@@ -228,23 +189,23 @@ export default function PricingPage() {
             {[
               {
                 question: 'What happens when I reach my 3-product limit on the Free plan?',
-                answer: 'Once you submit 3 products on the Free plan, you\'ll need to upgrade to Premium to submit more. Your existing products will remain published.',
+                answer: 'Once you submit 3 products on the Free plan, you\'ll need to purchase a Premium launch ($29) to submit more. Your existing products will remain published.',
               },
               {
                 question: 'How does the 15-day featured placement work?',
                 answer: 'Premium products are prominently featured on the homepage for 15 consecutive days after approval, giving you maximum visibility to the community.',
               },
               {
-                question: 'Can I upgrade from Free to Premium anytime?',
-                answer: 'Yes! Upgrade instantly to unlock unlimited submissions, priority 24-hour review, and 15-day featured placement for all future products.',
+                question: 'Is Premium a subscription or one-time payment?',
+                answer: 'Premium is $29 per product launch, not a subscription. Each time you want to launch a product with premium features, you pay $29 one-time.',
               },
               {
                 question: 'What payment methods do you accept?',
                 answer: 'We accept all major credit cards (Visa, Mastercard, American Express). Payments are processed securely through Stripe.',
               },
               {
-                question: 'What happens when I cancel Premium?',
-                answer: 'Your premium benefits continue until the end of your billing period. After that, you\'ll return to the Free plan with the 3-product limit.',
+                question: 'Can I upgrade an existing Free product to Premium?',
+                answer: 'Yes! You can upgrade any of your existing products to Premium anytime to get the 15-day featured placement and other premium benefits.',
               },
             ].map((faq, index) => (
               <div key={index} className='bg-stone-50 border border-stone-200 rounded-xl p-6'>
