@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
 import { PremiumBadge } from '@/components/ui/LaunchBadge';
 import { Product } from '@/types/product';
@@ -38,47 +39,7 @@ export default function Home() {
 
   return (
     <div className='min-h-screen bg-stone-50'>
-      {/* Header */}
-      <header className='fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-stone-200'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex items-center justify-between h-16'>
-            <Link href='/' className='flex items-center gap-2'>
-              <div className='w-8 h-8 bg-gradient-to-br from-orange-500 to-pink-500 rounded-lg flex items-center justify-center shadow-lg shadow-orange-500/30'>
-                <svg className='w-5 h-5 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2.5} d='M12 6v6m0 0v6m0-6h6m-6 0H6' />
-                  <circle cx='12' cy='12' r='10' strokeWidth={2.5} />
-                </svg>
-              </div>
-              <span className='text-lg font-semibold text-stone-800'>BuatProduct</span>
-            </Link>
-            
-            <nav className='hidden md:flex items-center gap-8'>
-              <Link href='/products' className='text-sm text-stone-600 hover:text-orange-600 transition-colors font-medium'>
-                Products
-              </Link>
-              <Link href='/pricing' className='text-sm text-stone-600 hover:text-orange-600 transition-colors font-medium'>
-                Pricing
-              </Link>
-              <Link href='/past-launches' className='text-sm text-stone-600 hover:text-orange-600 transition-colors font-medium'>
-                Past Launches
-              </Link>
-            </nav>
-            
-            <div className='flex items-center gap-3'>
-              <Link href='/login'>
-                <Button variant='ghost' size='sm' className='text-sm text-stone-600 hover:text-orange-600'>
-                  Sign in
-                </Button>
-              </Link>
-              <Link href='/signup'>
-                <Button size='sm' className='bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white text-sm px-4 shadow-lg shadow-orange-500/30'>
-                  Get Started
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
       
       {/* Hero */}
       <section className='bg-gradient-to-b from-white to-stone-50 border-b border-stone-200'>
