@@ -1,14 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function SubmitPage() {
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -20,6 +22,34 @@ export default function SubmitPage() {
     tags: '',
     logo: '',
   });
+
+  // Check authentication on mount
+  useEffect(() => {
+    if (!authLoading && !user) {
+      // Redirect to home if not authenticated
+      router.push('/');
+    }
+  }, [user, authLoading, router]);
+
+  // Show loading state while checking auth
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-stone-50">
+        <Header />
+        <div className="pt-32 pb-20 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p className="mt-4 text-stone-600">Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render form if not authenticated
+  if (!user) {
+    return null;
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -47,16 +77,16 @@ export default function SubmitPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-stone-50">
       <Header />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">🚀 Submit Your Product</h1>
-          <p className="text-gray-600">Share your creation with our community of makers and early adopters</p>
+          <h1 className="text-4xl font-bold text-stone-900 mb-2">🚀 Submit Your Product</h1>
+          <p className="text-stone-600">Share your creation with our community of makers and early adopters</p>
         </div>
 
-        <Card className="p-8">
+        <Card className="p-8 border-stone-200 bg-white">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <Input
@@ -83,7 +113,7 @@ export default function SubmitPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-stone-700 mb-2">
                 Short Description
               </label>
               <input
@@ -91,16 +121,16 @@ export default function SubmitPage() {
                 name="shortDescription"
                 value={formData.shortDescription}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent"
                 placeholder="One-line description of your product"
                 maxLength={60}
                 required
               />
-              <p className="mt-1 text-sm text-gray-500">{formData.shortDescription.length}/60 characters</p>
+              <p className="mt-1 text-sm text-stone-500">{formData.shortDescription.length}/60 characters</p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-stone-700 mb-2">
                 Full Description
               </label>
               <textarea
@@ -108,22 +138,22 @@ export default function SubmitPage() {
                 value={formData.description}
                 onChange={handleChange}
                 rows={5}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent"
                 placeholder="Describe your product in detail..."
                 required
               />
-              <p className="mt-1 text-sm text-gray-500">Tell us what makes your product special</p>
+              <p className="mt-1 text-sm text-stone-500">Tell us what makes your product special</p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-stone-700 mb-2">
                 Category
               </label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent"
                 required
               >
                 <option value="SaaS">SaaS</option>
@@ -134,6 +164,7 @@ export default function SubmitPage() {
                 <option value="AI Tools">AI Tools</option>
                 <option value="Mobile App">Mobile App</option>
                 <option value="Chrome Extension">Chrome Extension</option>
+                <option value="Other">Other</option>
               </select>
             </div>
 
@@ -173,9 +204,9 @@ export default function SubmitPage() {
               <p className="mt-1 text-sm text-gray-500">Direct link to your product logo (recommended: 512x512px)</p>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h3 className="font-semibold text-blue-900 mb-2">📋 Submission Guidelines</h3>
-              <ul className="text-sm text-blue-800 space-y-1">
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <h3 className="font-semibold text-orange-900 mb-2">📋 Submission Guidelines</h3>
+              <ul className="text-sm text-orange-800 space-y-1">
                 <li>• Make sure your product is live and accessible</li>
                 <li>• Provide accurate and detailed information</li>
                 <li>• Use a high-quality logo image</li>
@@ -186,7 +217,7 @@ export default function SubmitPage() {
             <div className="flex items-center gap-4 pt-4">
               <Button
                 type="submit"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8"
+                className="bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 px-8 shadow-lg shadow-orange-500/30"
                 isLoading={loading}
               >
                 Submit Product

@@ -10,6 +10,7 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
   'Finance',
   'Marketing',
   'Personal Life',
+  'Other',
 ];
 
 export const CATEGORY_DESCRIPTIONS: Record<ProductCategory, string> = {
@@ -28,6 +29,7 @@ export const CATEGORY_DESCRIPTIONS: Record<ProductCategory, string> = {
   'AI Tools': 'Artificial intelligence powered tools',
   'Mobile App': 'Mobile applications for iOS and Android',
   'Chrome Extension': 'Browser extensions for Chrome',
+  'Other': 'Products that don\'t fit other categories',
 };
 
 export const CATEGORY_COLORS: Record<ProductCategory, string> = {
@@ -46,4 +48,5 @@ export const CATEGORY_COLORS: Record<ProductCategory, string> = {
   'AI Tools': 'bg-fuchsia-100 text-fuchsia-800',
   'Mobile App': 'bg-rose-100 text-rose-800',
   'Chrome Extension': 'bg-lime-100 text-lime-800',
+  'Other': 'bg-gray-100 text-gray-800',
 };

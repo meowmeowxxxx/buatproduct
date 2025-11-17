@@ -17,7 +17,8 @@ export type ProductCategory =
   | 'Analytics'
   | 'AI Tools'
   | 'Mobile App'
-  | 'Chrome Extension';
+  | 'Chrome Extension'
+  | 'Other';
 
 export interface Product {
   id: string;
