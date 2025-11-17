@@ -12,7 +12,11 @@ export interface User {
   website?: string;
   twitter?: string;
   role: UserRole;
-  isPremium: boolean;
+  
+  // Premium Unlimited Plan ($49 lifetime)
+  isPremium: boolean; // Has Premium Unlimited access
+  premiumSince?: Timestamp; // When they purchased Premium Unlimited
+  
   productCount: number;
   subscriptionEndDate?: Timestamp;
   createdAt: Timestamp;

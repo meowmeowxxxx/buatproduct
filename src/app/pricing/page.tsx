@@ -7,47 +7,72 @@ import { Button } from '@/components/ui/Button';
 
 const pricingPlans = [
   {
-    name: 'Free',
-    badge: 'Launch for Free',
+    id: 'free',
+    name: 'Free Launch',
+    badge: 'Get Started',
     badgeColor: 'bg-stone-600 text-white',
     price: '$0',
     originalPrice: null,
-    period: '',
-    description: 'Perfect for testing the waters',
+    period: 'forever',
+    description: 'Perfect for testing the waters and getting started',
     features: [
       { text: 'Submit up to 3 products', included: true },
-      { text: 'Reviewed & listed within 72 hours', included: true },
-      { text: 'Get upvotes from the community', included: true },
-      { text: 'Free "Launched on BuatProduct" badge', included: true },
-      { text: 'Share your product page', included: true },
-      { text: 'Track views and upvotes', included: true },
-      { text: 'Edit your product anytime', included: true },
+      { text: 'Listed on product pages', included: true },
+      { text: 'Community upvotes & feedback', included: true },
+      { text: 'Basic analytics (views & upvotes)', included: true },
+      { text: 'Lifetime backlink (top 3 products)', included: true },
+      { text: 'Edit your products anytime', included: true },
+      { text: 'Standard review (72 hours)', included: true },
     ],
-    cta: 'Get Started Free',
+    cta: 'Start Free',
     ctaSubtext: 'No credit card required',
     popular: false,
   },
   {
-    name: 'Premium',
-    badge: 'Most Popular',
+    id: 'featured',
+    name: 'Featured Product',
+    badge: '🔥 Best Value',
     badgeColor: 'bg-gradient-to-r from-orange-500 to-pink-500 text-white',
-    price: '$29',
+    price: '$15',
     originalPrice: null,
-    period: '/per launch',
-    description: 'For serious makers who want maximum visibility',
+    period: 'per product',
+    description: 'Get maximum visibility on the homepage for 15 days',
+    features: [
+      { text: '15 days featured on homepage', included: true, highlight: true },
+      { text: 'Premium "Featured" badge', included: true, highlight: true },
+      { text: 'Prominent placement above the fold', included: true, highlight: true },
+      { text: 'Priority in search results', included: true },
+      { text: 'Fast-track review (24 hours)', included: true },
+      { text: 'Featured in weekly newsletter', included: true },
+      { text: 'DR72+ lifetime backlink', included: true },
+      { text: 'Advanced analytics dashboard', included: true },
+    ],
+    cta: 'Get Featured',
+    ctaSubtext: 'One-time payment • 15 days visibility',
+    popular: true,
+  },
+  {
+    id: 'premium',
+    name: 'Premium Unlimited',
+    badge: 'Best for Makers',
+    badgeColor: 'bg-gradient-to-r from-purple-600 to-pink-600 text-white',
+    price: '$49',
+    originalPrice: null,
+    period: 'lifetime',
+    description: 'Launch unlimited products with premium benefits',
     features: [
       { text: 'Submit unlimited products', included: true, highlight: true },
-      { text: 'Featured on homepage for 15 days', included: true, highlight: true },
-      { text: 'Reviewed & listed under 24 hours', included: true, highlight: true },
-      { text: 'Priority support', included: true },
-      { text: 'Premium "Featured on BuatProduct" badge', included: true },
-      { text: 'Advanced analytics & insights', included: true },
-      { text: 'Custom product page design', included: true },
-      { text: 'Share across all social channels', included: true },
+      { text: 'Choose your launch dates', included: true, highlight: true },
+      { text: 'Relaunch products monthly', included: true, highlight: true },
+      { text: 'Priority support 24/7', included: true },
+      { text: 'Premium badges on all products', included: true },
+      { text: 'Advanced analytics for all products', included: true },
+      { text: 'Lifetime backlinks for all products', included: true },
+      { text: 'No recurring fees ever', included: true },
     ],
-    cta: 'Get Premium Launch',
-    ctaSubtext: 'One-time payment per product',
-    popular: true,
+    cta: 'Get Premium Unlimited',
+    ctaSubtext: 'One-time payment • Lifetime access',
+    popular: false,
   },
 ];
 
@@ -61,25 +86,49 @@ export default function PricingPage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12'>
           <div className='max-w-3xl mx-auto text-center'>
             <h1 className='text-4xl md:text-5xl font-bold text-stone-900 mb-4 leading-tight'>
-              Launch Your Product for <span className='bg-gradient-to-r from-orange-500 via-purple-600 to-pink-600 bg-clip-text text-transparent'>Free</span>
+              Simple, Transparent <span className='bg-gradient-to-r from-orange-500 via-purple-600 to-pink-600 bg-clip-text text-transparent'>Pricing</span>
             </h1>
             <p className='text-base text-stone-600 mb-8 max-w-2xl mx-auto'>
-              No hidden fees, no credit card required. Start connecting with early adopters today.
+              Start free, scale when you need. No hidden fees, no surprises. Choose the plan that fits your goals.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats/Social Proof Section */}
+      <section className='py-12 bg-gradient-to-r from-orange-50 via-purple-50 to-pink-50'>
+        <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='grid md:grid-cols-4 gap-8 text-center'>
+            <div>
+              <div className='text-4xl font-bold bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent mb-2'>10K+</div>
+              <div className='text-sm text-stone-600'>Products Launched</div>
+            </div>
+            <div>
+              <div className='text-4xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent mb-2'>130K</div>
+              <div className='text-sm text-stone-600'>Page Views/Month</div>
+            </div>
+            <div>
+              <div className='text-4xl font-bold bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent mb-2'>40K</div>
+              <div className='text-sm text-stone-600'>Monthly Visitors</div>
+            </div>
+            <div>
+              <div className='text-4xl font-bold bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent mb-2'>DR72+</div>
+              <div className='text-sm text-stone-600'>Backlink Authority</div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Pricing Cards */}
       <section className='py-16'>
-        <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='grid md:grid-cols-2 gap-8'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='grid md:grid-cols-3 gap-6 max-w-7xl mx-auto'>
             {pricingPlans.map((plan) => (
               <div
-                key={plan.name}
-                className={`relative bg-white rounded-2xl p-8 ${
+                key={plan.id}
+                className={`relative bg-white rounded-2xl p-7 ${
                   plan.popular 
-                    ? 'border-2 border-orange-500 shadow-xl shadow-orange-500/20' 
+                    ? 'border-2 border-orange-500 shadow-2xl shadow-orange-500/20 scale-105' 
                     : 'border border-stone-200 shadow-lg'
                 }`}
               >
@@ -151,24 +200,30 @@ export default function PricingPage() {
                 <tr className='border-b-2 border-stone-200'>
                   <th className='text-left py-4 px-4 text-sm font-semibold text-stone-900'>Feature</th>
                   <th className='text-center py-4 px-4 text-sm font-semibold text-stone-900'>Free</th>
-                  <th className='text-center py-4 px-4 text-sm font-semibold text-orange-600'>Premium</th>
+                  <th className='text-center py-4 px-4 text-sm font-semibold text-orange-600'>Featured</th>
+                  <th className='text-center py-4 px-4 text-sm font-semibold text-purple-600'>Premium</th>
                 </tr>
               </thead>
               <tbody className='divide-y divide-stone-200'>
                 {[
-                  { feature: 'Product Submissions', free: '3 products', premium: 'Unlimited' },
-                  { feature: 'Review Time', free: '72 hours', premium: '24 hours' },
-                  { feature: 'Homepage Featured', free: '—', premium: '15 days' },
-                  { feature: 'Community Upvotes', free: '✓', premium: '✓' },
-                  { feature: 'Product Analytics', free: 'Basic', premium: 'Advanced' },
-                  { feature: 'Support', free: 'Community', premium: 'Priority' },
-                  { feature: 'Custom Design', free: '—', premium: '✓' },
-                  { feature: 'Badge', free: 'Standard', premium: 'Premium' },
+                  { feature: 'Product Submissions', free: '3 products', featured: 'Per product', premium: 'Unlimited' },
+                  { feature: 'Review Time', free: '72 hours', featured: '24 hours', premium: '24 hours' },
+                  { feature: 'Homepage Featured', free: '—', featured: '15 days', premium: '—' },
+                  { feature: 'Premium Badge', free: '—', featured: '✓', premium: '✓' },
+                  { feature: 'Community Upvotes', free: '✓', featured: '✓', premium: '✓' },
+                  { feature: 'Product Analytics', free: 'Basic', featured: 'Advanced', premium: 'Advanced' },
+                  { feature: 'Support', free: 'Community', featured: 'Priority', premium: 'Priority 24/7' },
+                  { feature: 'Newsletter Feature', free: '—', featured: '✓', premium: '✓' },
+                  { feature: 'Lifetime Backlinks', free: 'Top 3 only', featured: '✓', premium: '✓' },
+                  { feature: 'Relaunch Products', free: '—', featured: '—', premium: 'Monthly' },
+                  { feature: 'Choose Launch Date', free: '—', featured: '—', premium: '✓' },
+                  { feature: 'Price', free: 'Free', featured: '$15/product', premium: '$49 lifetime' },
                 ].map((row, index) => (
                   <tr key={index} className='hover:bg-stone-50 transition-colors'>
-                    <td className='py-4 px-4 text-sm text-stone-700'>{row.feature}</td>
+                    <td className='py-4 px-4 text-sm text-stone-700 font-medium'>{row.feature}</td>
                     <td className='py-4 px-4 text-sm text-center text-stone-600'>{row.free}</td>
-                    <td className='py-4 px-4 text-sm text-center text-orange-600 font-medium'>{row.premium}</td>
+                    <td className='py-4 px-4 text-sm text-center text-orange-600 font-medium'>{row.featured}</td>
+                    <td className='py-4 px-4 text-sm text-center text-purple-600 font-medium'>{row.premium}</td>
                   </tr>
                 ))}
               </tbody>
@@ -188,24 +243,28 @@ export default function PricingPage() {
           <div className='space-y-6'>
             {[
               {
-                question: 'What happens when I reach my 3-product limit on the Free plan?',
-                answer: 'Once you submit 3 products on the Free plan, you\'ll need to purchase a Premium launch ($29) to submit more. Your existing products will remain published.',
+                question: 'What\'s the difference between Featured Product and Premium Unlimited?',
+                answer: 'Featured Product ($15) gives you 15 days of homepage visibility for a single product - great for individual launches. Premium Unlimited ($49) is a one-time lifetime payment that lets you submit unlimited products forever with premium benefits on all of them.',
+              },
+              {
+                question: 'Can I upgrade from Free to Featured or Premium later?',
+                answer: 'Absolutely! You can start with the Free plan and upgrade any product to Featured ($15 for 15 days of homepage visibility) anytime. Or purchase Premium Unlimited ($49 lifetime) to unlock unlimited submissions.',
               },
               {
                 question: 'How does the 15-day featured placement work?',
-                answer: 'Premium products are prominently featured on the homepage for 15 consecutive days after approval, giving you maximum visibility to the community.',
+                answer: 'When you purchase Featured Product ($15), your product will be prominently displayed on the homepage for 15 consecutive days starting from your launch date. You\'ll get maximum visibility including newsletter features and priority positioning.',
               },
               {
-                question: 'Is Premium a subscription or one-time payment?',
-                answer: 'Premium is $29 per product launch, not a subscription. Each time you want to launch a product with premium features, you pay $29 one-time.',
+                question: 'Is Premium Unlimited really lifetime access?',
+                answer: 'Yes! Premium Unlimited is a one-time payment of $49 that gives you lifetime access. You can submit unlimited products forever, relaunch monthly, choose your launch dates, and access all premium features with no recurring fees.',
               },
               {
                 question: 'What payment methods do you accept?',
-                answer: 'We accept all major credit cards (Visa, Mastercard, American Express). Payments are processed securely through Stripe.',
+                answer: 'We accept all major credit cards (Visa, Mastercard, American Express) and digital wallets. All payments are processed securely through Stripe.',
               },
               {
-                question: 'Can I upgrade an existing Free product to Premium?',
-                answer: 'Yes! You can upgrade any of your existing products to Premium anytime to get the 15-day featured placement and other premium benefits.',
+                question: 'Can I get a refund?',
+                answer: 'We offer a 7-day money-back guarantee on Featured Product and Premium Unlimited purchases. If you\'re not satisfied, contact us within 7 days for a full refund.',
               },
             ].map((faq, index) => (
               <div key={index} className='bg-stone-50 border border-stone-200 rounded-xl p-6'>

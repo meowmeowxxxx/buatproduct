@@ -35,10 +35,16 @@ export interface Product {
   tags: string[];
   websiteUrl?: string;
   status: ProductStatus;
+  
+  // Featured Product ($15 for 15 days)
   featured: boolean;
   featuredUntil?: Timestamp | null;
+  featuredPurchaseDate?: Timestamp | null;
+  
+  // Premium badges and features
   premium?: boolean; // Premium launch badge
   premiumUntil?: Timestamp | null; // Premium promotion end date
+  
   upvotes: number;
   upvotedBy: string[]; // Array of user IDs
   views: number;

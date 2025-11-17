@@ -59,6 +59,10 @@ export const Header: React.FC = () => {
                 Products
                 <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-600 group-hover:w-full transition-all duration-300'></span>
               </Link>
+              <Link href='/pricing' className='text-sm font-medium text-gray-600 hover:text-orange-600 transition-colors relative group'>
+                Pricing
+                <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-600 group-hover:w-full transition-all duration-300'></span>
+              </Link>
               <Link href='/submit' className='text-sm font-medium text-gray-600 hover:text-orange-600 transition-colors relative group'>
                 Submit
                 <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-600 group-hover:w-full transition-all duration-300'></span>
@@ -208,6 +212,7 @@ export const Header: React.FC = () => {
           <div className='md:hidden py-4 border-t border-gray-100'>
             <nav className='flex flex-col gap-4'>
               <Link href='/products' className='text-sm font-medium text-gray-600 hover:text-orange-600'>Products</Link>
+              <Link href='/pricing' className='text-sm font-medium text-gray-600 hover:text-orange-600'>Pricing</Link>
               <Link href='/submit' className='text-sm font-medium text-gray-600 hover:text-orange-600'>Submit</Link>
               <Link href='/dashboard' className='text-sm font-medium text-gray-600 hover:text-orange-600'>Dashboard</Link>
               <div className='flex flex-col gap-2 pt-4 border-t border-gray-100'>
