@@ -8,23 +8,44 @@ const pricingPlans = [
   {
     name: 'Free',
     badge: 'Launch for Free',
-    badgeColor: 'bg-gradient-to-r from-orange-500 to-pink-500 text-white',
-    price: 'Free',
+    badgeColor: 'bg-stone-600 text-white',
+    price: '$0',
     originalPrice: null,
     period: '',
-    description: 'Get started and launch your product today',
+    description: 'Perfect for testing the waters',
     features: [
-      { text: 'Submit unlimited products', included: true },
+      { text: 'Submit up to 3 products', included: true },
       { text: 'Reviewed & listed within 72 hours', included: true },
-      { text: 'Featured on homepage (if selected)', included: true },
       { text: 'Get upvotes from the community', included: true },
-      { text: 'Free "Launched on BuatProduct" badge', included: true, highlight: true },
+      { text: 'Free "Launched on BuatProduct" badge', included: true },
       { text: 'Share your product page', included: true },
       { text: 'Track views and upvotes', included: true },
       { text: 'Edit your product anytime', included: true },
     ],
     cta: 'Get Started Free',
     ctaSubtext: 'No credit card required',
+    popular: false,
+  },
+  {
+    name: 'Premium',
+    badge: 'Most Popular',
+    badgeColor: 'bg-gradient-to-r from-orange-500 to-pink-500 text-white',
+    price: '$29',
+    originalPrice: null,
+    period: '/month',
+    description: 'For serious makers who want maximum visibility',
+    features: [
+      { text: 'Submit unlimited products', included: true, highlight: true },
+      { text: 'Featured on homepage for 15 days', included: true, highlight: true },
+      { text: 'Reviewed & listed under 24 hours', included: true, highlight: true },
+      { text: 'Priority support', included: true },
+      { text: 'Premium "Launched on BuatProduct" badge', included: true },
+      { text: 'Advanced analytics & insights', included: true },
+      { text: 'Custom product page design', included: true },
+      { text: 'Share across all social channels', included: true },
+    ],
+    cta: 'Upgrade to Premium',
+    ctaSubtext: 'Billed monthly, cancel anytime',
     popular: true,
   },
 ];
@@ -90,12 +111,16 @@ export default function PricingPage() {
 
       {/* Pricing Cards */}
       <section className='py-16'>
-        <div className='max-w-3xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='grid grid-cols-1'>
+        <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='grid md:grid-cols-2 gap-8'>
             {pricingPlans.map((plan) => (
               <div
                 key={plan.name}
-                className='relative bg-white border-2 border-orange-500 rounded-2xl p-8 shadow-xl shadow-orange-500/20'
+                className={`relative bg-white rounded-2xl p-8 ${
+                  plan.popular 
+                    ? 'border-2 border-orange-500 shadow-xl shadow-orange-500/20' 
+                    : 'border border-stone-200 shadow-lg'
+                }`}
               >
                 {/* Badge */}
                 <div className='mb-4'>
@@ -126,7 +151,7 @@ export default function PricingPage() {
                         <svg className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                           <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
                         </svg>
-                        <span className={`text-sm ${(feature as any).highlight ? 'text-lime-600 font-medium' : (feature as any).note ? 'text-stone-500 italic' : 'text-stone-700'}`}>
+                        <span className={`text-sm ${(feature as any).highlight ? 'text-orange-600 font-semibold' : 'text-stone-700'}`}>
                           {feature.text}
                         </span>
                       </div>
@@ -134,28 +159,59 @@ export default function PricingPage() {
                   </div>
                 </div>
 
-                {/* Featured Badge Section for Free Plan */}
-                {plan.name === 'Free' && (
-                  <div className='mb-6 p-4 bg-stone-50 border border-stone-200 rounded-lg text-center'>
-                    <div className='inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white text-xs font-medium rounded-full mb-2'>
-                      <svg className='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'>
-                        <path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z' />
-                      </svg>
-                      LAUNCHED ON BUATPRODUCT
-                    </div>
-                    <p className='text-xs text-stone-600'>Get your free badge after publishing</p>
-                  </div>
-                )}
-
                 {/* CTA Button */}
                 <Button
-                  className='w-full mb-3 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold shadow-lg'
+                  className={`w-full mb-3 font-semibold ${
+                    plan.popular 
+                      ? 'bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white shadow-lg' 
+                      : 'bg-stone-900 hover:bg-stone-800 text-white'
+                  }`}
                 >
                   {plan.cta}
                 </Button>
                 <p className='text-xs text-center text-stone-500'>{plan.ctaSubtext}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Table */}
+      <section className='py-16 bg-white border-y border-stone-200'>
+        <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='text-center mb-12'>
+            <h2 className='text-3xl font-bold text-stone-900 mb-3'>Compare Plans</h2>
+            <p className='text-stone-600'>Choose the plan that best fits your needs</p>
+          </div>
+
+          <div className='overflow-x-auto'>
+            <table className='w-full'>
+              <thead>
+                <tr className='border-b-2 border-stone-200'>
+                  <th className='text-left py-4 px-4 text-sm font-semibold text-stone-900'>Feature</th>
+                  <th className='text-center py-4 px-4 text-sm font-semibold text-stone-900'>Free</th>
+                  <th className='text-center py-4 px-4 text-sm font-semibold text-orange-600'>Premium</th>
+                </tr>
+              </thead>
+              <tbody className='divide-y divide-stone-200'>
+                {[
+                  { feature: 'Product Submissions', free: '3 products', premium: 'Unlimited' },
+                  { feature: 'Review Time', free: '72 hours', premium: '24 hours' },
+                  { feature: 'Homepage Featured', free: '—', premium: '15 days' },
+                  { feature: 'Community Upvotes', free: '✓', premium: '✓' },
+                  { feature: 'Product Analytics', free: 'Basic', premium: 'Advanced' },
+                  { feature: 'Support', free: 'Community', premium: 'Priority' },
+                  { feature: 'Custom Design', free: '—', premium: '✓' },
+                  { feature: 'Badge', free: 'Standard', premium: 'Premium' },
+                ].map((row, index) => (
+                  <tr key={index} className='hover:bg-stone-50 transition-colors'>
+                    <td className='py-4 px-4 text-sm text-stone-700'>{row.feature}</td>
+                    <td className='py-4 px-4 text-sm text-center text-stone-600'>{row.free}</td>
+                    <td className='py-4 px-4 text-sm text-center text-orange-600 font-medium'>{row.premium}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -171,24 +227,24 @@ export default function PricingPage() {
           <div className='space-y-6'>
             {[
               {
-                question: 'Can I switch plans anytime?',
-                answer: 'Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately, and we will prorate any charges.',
+                question: 'What happens when I reach my 3-product limit on the Free plan?',
+                answer: 'Once you submit 3 products on the Free plan, you\'ll need to upgrade to Premium to submit more. Your existing products will remain published.',
+              },
+              {
+                question: 'How does the 15-day featured placement work?',
+                answer: 'Premium products are prominently featured on the homepage for 15 consecutive days after approval, giving you maximum visibility to the community.',
+              },
+              {
+                question: 'Can I upgrade from Free to Premium anytime?',
+                answer: 'Yes! Upgrade instantly to unlock unlimited submissions, priority 24-hour review, and 15-day featured placement for all future products.',
               },
               {
                 question: 'What payment methods do you accept?',
-                answer: 'We accept all major credit cards (Visa, Mastercard, American Express) and PayPal for annual subscriptions.',
+                answer: 'We accept all major credit cards (Visa, Mastercard, American Express). Payments are processed securely through Stripe.',
               },
               {
-                question: 'Is there a free trial?',
-                answer: 'Yes! All paid plans come with a 14-day free trial. No credit card required to start your trial.',
-              },
-              {
-                question: 'What happens when I cancel?',
-                answer: 'You can continue using your plan until the end of your billing period. Your data will be saved for 30 days in case you want to reactivate.',
-              },
-              {
-                question: 'Do you offer refunds?',
-                answer: 'We offer a 30-day money-back guarantee on all annual plans. Monthly plans are non-refundable but can be cancelled anytime.',
+                question: 'What happens when I cancel Premium?',
+                answer: 'Your premium benefits continue until the end of your billing period. After that, you\'ll return to the Free plan with the 3-product limit.',
               },
             ].map((faq, index) => (
               <div key={index} className='bg-stone-50 border border-stone-200 rounded-xl p-6'>

@@ -1,6 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 
-export type ProductStatus = 'draft' | 'submitted' | 'published' | 'suspended';
+export type ProductStatus = 'draft' | 'submitted' | 'published' | 'rejected' | 'suspended';
 
 export type ProductCategory = 
   | 'SaaS'
@@ -26,9 +26,11 @@ export interface Product {
   username: string;
   name: string;
   slug: string;
+  tagline: string;
   description: string;
   shortDescription: string;
   logo: string;
+  website: string;
   category: ProductCategory;
   tags: string[];
   websiteUrl?: string;
@@ -44,6 +46,8 @@ export interface Product {
   updatedAt: Timestamp;
   submittedAt?: Timestamp | null;
   publishedAt?: Timestamp | null;
+  reviewedAt?: Timestamp | null;
+  reviewedBy?: string;
   rejectionReason?: string | null;
 }
 

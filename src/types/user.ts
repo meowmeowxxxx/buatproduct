@@ -12,6 +12,9 @@ export interface User {
   website?: string;
   twitter?: string;
   role: UserRole;
+  isPremium: boolean;
+  productCount: number;
+  subscriptionEndDate?: Timestamp;
   createdAt: Timestamp;
   updatedAt: Timestamp;
   emailVerified: boolean;

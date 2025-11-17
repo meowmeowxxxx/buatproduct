@@ -32,6 +32,8 @@ export async function signUp(
     username,
     displayName,
     role: 'user',
+    isPremium: false,
+    productCount: 0,
     createdAt: serverTimestamp() as any,
     updatedAt: serverTimestamp() as any,
     emailVerified: false,
