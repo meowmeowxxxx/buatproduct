@@ -1,23 +1,111 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useAuth } from '@/contexts/AuthContext';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
+import { updateUserProfile, upgradeUserToPremium, deleteUserAccount } from '@/lib/firebase/users';
 
 export default function ProfilePage() {
+  const router = useRouter();
   const { user, userData, loading } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpgrading, setIsUpgrading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [formData, setFormData] = useState({
-    displayName: userData?.displayName || '',
-    username: userData?.username || '',
+    displayName: '',
+    username: '',
     bio: '',
     website: '',
     twitter: '',
-    github: '',
   });
+
+  // Initialize form data when userData loads
+  useEffect(() => {
+    if (userData) {
+      setFormData({
+        displayName: userData.displayName || '',
+        username: userData.username || '',
+        bio: userData.bio || '',
+        website: userData.website || '',
+        twitter: userData.twitter || '',
+      });
+    }
+  }, [userData]);
+
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    
+    setIsSaving(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      await updateUserProfile(user.uid, {
+        displayName: formData.displayName,
+        username: formData.username,
+        bio: formData.bio,
+        website: formData.website,
+        twitter: formData.twitter,
+      });
+      setSuccess('Profile updated successfully!');
+      setIsEditing(false);
+      // Reload to get updated user data
+      window.location.reload();
+    } catch (err) {
+      console.error('Error updating profile:', err);
+      setError(err instanceof Error ? err.message : 'Failed to update profile');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleUpgradeToPremium = async () => {
+    if (!user) return;
+    
+    setIsUpgrading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      await upgradeUserToPremium(user.uid);
+      setSuccess('Upgraded to Premium successfully!');
+      // Reload to get updated user data
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (err) {
+      console.error('Error upgrading to premium:', err);
+      setError(err instanceof Error ? err.message : 'Failed to upgrade to premium');
+    } finally {
+      setIsUpgrading(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!user) return;
+    
+    const confirmed = confirm(
+      'Are you sure you want to delete your account? This action cannot be undone and will permanently delete all your data including products, comments, and upvotes.'
+    );
+
+    if (!confirmed) return;
+
+    setIsDeleting(true);
+    setError('');
+
+    try {
+      await deleteUserAccount(user.uid);
+      router.push('/');
+    } catch (err) {
+      console.error('Error deleting account:', err);
+      setError(err instanceof Error ? err.message : 'Failed to delete account');
+      setIsDeleting(false);
+    }
+  };
 
   if (!loading && !user) {
     redirect('/login');
@@ -182,35 +270,37 @@ export default function ProfilePage() {
                       className={!isEditing ? 'bg-stone-50' : ''}
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-stone-700 mb-1.5">
-                      GitHub
-                    </label>
-                    <Input
-                      type="text"
-                      value={formData.github}
-                      onChange={(e) => setFormData({ ...formData, github: e.target.value })}
-                      disabled={!isEditing}
-                      placeholder="username"
-                      className={!isEditing ? 'bg-stone-50' : ''}
-                    />
-                  </div>
                 </div>
+
+                {error && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                    {error}
+                  </div>
+                )}
+
+                {success && (
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+                    {success}
+                  </div>
+                )}
 
                 {isEditing && (
                   <div className="flex justify-end gap-3 pt-4">
                     <Button
                       variant="outline"
-                      onClick={() => setIsEditing(false)}
+                      onClick={() => {
+                        setIsEditing(false);
+                        setError('');
+                        setSuccess('');
+                      }}
+                      disabled={isSaving}
                     >
                       Cancel
                     </Button>
                     <Button
                       className="bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600"
-                      onClick={() => {
-                        // TODO: Save profile changes
-                        setIsEditing(false);
-                      }}
+                      onClick={handleSaveProfile}
+                      isLoading={isSaving}
                     >
                       Save Changes
                     </Button>
@@ -237,6 +327,8 @@ export default function ProfilePage() {
                 <Button
                   size="sm"
                   className="bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600"
+                  onClick={handleUpgradeToPremium}
+                  isLoading={isUpgrading}
                 >
                   Upgrade to Premium
                 </Button>
@@ -274,7 +366,7 @@ export default function ProfilePage() {
               <p className="text-sm font-medium text-stone-900">Delete Account</p>
               <p className="text-xs text-stone-600 mt-0.5">Permanently delete your account and all data</p>
             </div>
-            <Button variant="outline" size="sm" className="border-red-300 text-red-600 hover:bg-red-50">
+            <Button variant="outline" size="sm" className="border-red-300 text-red-600 hover:bg-red-50" onClick={handleDeleteAccount} isLoading={isDeleting}>
               Delete Account
             </Button>
           </div>

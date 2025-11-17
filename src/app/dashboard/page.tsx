@@ -1,37 +1,67 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { useAuth } from '@/contexts/AuthContext';
+import { getProductsByUser } from '@/lib/firebase/products';
+import { Product } from '@/types/product';
+import { redirect } from 'next/navigation';
 
 export default function DashboardPage() {
-  const [products] = useState([
-    {
-      id: '1',
-      name: 'My Awesome SaaS',
-      status: 'published',
-      upvotes: 45,
-      views: 320,
-      comments: 12,
-    },
-    {
-      id: '2',
-      name: 'Cool Mobile App',
-      status: 'pending',
-      upvotes: 0,
-      views: 0,
-      comments: 0,
-    },
-  ]);
+  const { user, userData, loading: authLoading } = useAuth();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      if (!user) return;
+      
+      try {
+        setLoading(true);
+        const userProducts = await getProductsByUser(user.uid);
+        setProducts(userProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (user) {
+      fetchProducts();
+    }
+  }, [user]);
+
+  if (!authLoading && !user) {
+    redirect('/login');
+  }
+
+  if (authLoading || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 200px)' }}>
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-stone-600">Loading dashboard...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const totalUpvotes = products.reduce((sum, p) => sum + p.upvotes, 0);
+  const totalViews = products.reduce((sum, p) => sum + p.views, 0);
 
   const stats = [
-    { label: 'Total Products', value: '2', icon: '📦', color: 'blue' },
-    { label: 'Total Upvotes', value: '45', icon: '👍', color: 'purple' },
-    { label: 'Total Views', value: '320', icon: '👁️', color: 'pink' },
-    { label: 'Comments', value: '12', icon: '💬', color: 'green' },
+    { label: 'Total Products', value: products.length.toString(), icon: '📦', color: 'blue' },
+    { label: 'Total Upvotes', value: totalUpvotes.toString(), icon: '👍', color: 'purple' },
+    { label: 'Total Views', value: totalViews.toString(), icon: '👁️', color: 'pink' },
+    { label: 'Products Published', value: products.filter(p => p.status === 'published').length.toString(), icon: '✅', color: 'green' },
   ];
 
   return (
@@ -79,7 +109,6 @@ export default function DashboardPage() {
                   <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
                   <th className="text-center py-3 px-4 font-semibold text-gray-700">Upvotes</th>
                   <th className="text-center py-3 px-4 font-semibold text-gray-700">Views</th>
-                  <th className="text-center py-3 px-4 font-semibold text-gray-700">Comments</th>
                   <th className="text-right py-3 px-4 font-semibold text-gray-700">Actions</th>
                 </tr>
               </thead>
@@ -101,9 +130,6 @@ export default function DashboardPage() {
                     </td>
                     <td className="py-4 px-4 text-center">
                       <span className="font-semibold text-gray-900">{product.views}</span>
-                    </td>
-                    <td className="py-4 px-4 text-center">
-                      <span className="font-semibold text-gray-900">{product.comments}</span>
                     </td>
                     <td className="py-4 px-4 text-right">
                       <div className="flex items-center justify-end gap-2">

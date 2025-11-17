@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
@@ -8,9 +8,7 @@ import { PremiumBadge } from '@/components/ui/LaunchBadge';
 import { Product } from '@/types/product';
 import { Timestamp } from 'firebase/firestore';
 import { cn } from '@/lib/utils/cn';
-
-// Empty products array - ready to be populated from Firebase
-const mockProducts: Product[] = [];
+import { getProducts, getFeaturedProducts } from '@/lib/firebase/products';
 
 const categories = [
   { id: 'all', label: 'All Products' },
@@ -24,10 +22,34 @@ const categories = [
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('upvotes');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch products on mount
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        setLoading(true);
+        const [allProducts, featured] = await Promise.all([
+          getProducts(50, 'createdAt'),
+          getFeaturedProducts(3),
+        ]);
+        setProducts(allProducts);
+        setFeaturedProducts(featured);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
 
   let filteredProducts = selectedCategory === 'all' 
-    ? mockProducts 
-    : mockProducts.filter(p => 
+    ? products 
+    : products.filter((p: Product) =>
         p.category.toLowerCase().replace(' ', '').includes(selectedCategory.toLowerCase())
       );
 
@@ -36,7 +58,7 @@ export default function Home() {
     if (sortBy === 'views') return b.views - a.views;
     return 0;
   });
-
+  
   return (
     <div className='min-h-screen bg-stone-50'>
       <Header />
@@ -51,7 +73,7 @@ export default function Home() {
                 <span className='relative inline-flex rounded-full h-1.5 w-1.5 bg-orange-600'></span>
               </span>
               <span className='text-xs font-medium text-orange-700'>
-                {mockProducts.length === 0 ? 'Ready to launch the first product' : `${mockProducts.length.toLocaleString()}+ products launched`}
+                {products.length === 0 ? 'Ready to launch the first product' : `${products.length.toLocaleString()}+ products launched`}
               </span>
             </div>
             <h1 className='text-4xl md:text-5xl font-bold text-stone-900 mb-4 leading-tight'>
@@ -102,13 +124,13 @@ export default function Home() {
                 <div className='space-y-2'>
                   <div>
                     <div className='text-2xl font-bold bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent'>
-                      {mockProducts.length}
+                      {products.length}
                     </div>
                     <div className='text-xs text-stone-600'>Products</div>
                   </div>
                   <div>
                     <div className='text-2xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent'>
-                      {mockProducts.reduce((sum, p) => sum + p.upvotes, 0).toLocaleString()}
+                      {products.reduce((sum: number, p: Product) => sum + p.upvotes, 0).toLocaleString()}
                     </div>
                     <div className='text-xs text-stone-600'>Upvotes</div>
                   </div>
@@ -149,7 +171,8 @@ export default function Home() {
                 </div>
               ) : (
                 <div className='grid md:grid-cols-3 gap-5'>
-                  {filteredProducts.filter(p => p.featured).slice(0, 3).map((product) => (
+                  {featuredProducts.length > 0 ? (
+                    featuredProducts.map((product: Product) => (
                     <div key={product.id} className='bg-white border border-stone-200 rounded-xl hover:shadow-xl hover:border-orange-200 transition-all duration-300 group'>
                       <div className='p-5'>
                         <div className='flex items-start justify-between mb-4'>
@@ -176,7 +199,7 @@ export default function Home() {
                             {product.description}
                           </p>
                           <div className='flex flex-wrap gap-1.5'>
-                            {product.tags.map((tag) => (
+                            {product.tags.map((tag: string) => (
                               <span key={tag} className='px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded-md border border-stone-200 hover:border-orange-200 transition-colors'>
                                 {tag}
                               </span>
@@ -185,7 +208,12 @@ export default function Home() {
                         </Link>
                       </div>
                     </div>
-                  ))}
+                  ))
+                  ) : (
+                    <div className='col-span-3 text-center text-stone-600 text-sm py-8'>
+                      No featured products yet
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -226,7 +254,7 @@ export default function Home() {
                 </div>
               ) : (
                 <div className='space-y-3'>
-                  {filteredProducts.map((product) => (
+                  {filteredProducts.map((product: Product) => (
                     <div key={product.id} className='bg-white border border-stone-200 rounded-xl hover:shadow-lg hover:border-orange-200 transition-all duration-200 group'>
                       <div className='p-4 flex items-center gap-4'>
                         <a href={product.websiteUrl} target='_blank' rel='noopener noreferrer' className='flex-shrink-0'>
@@ -245,7 +273,7 @@ export default function Home() {
                             {product.description}
                           </p>
                           <div className='flex flex-wrap gap-1.5'>
-                            {product.tags.slice(0, 3).map((tag) => (
+                            {product.tags.slice(0, 3).map((tag: string) => (
                               <span key={tag} className='px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded-md border border-stone-200'>
                                 {tag}
                               </span>

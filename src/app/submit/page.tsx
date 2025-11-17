@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
 import { useAuth } from '@/contexts/AuthContext';
+import { createProduct } from '@/lib/firebase/products';
 
 export default function SubmitPage() {
   const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
+  const { user, userData, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
@@ -67,13 +69,46 @@ export default function SubmitPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user || !userData) return;
+    
     setLoading(true);
+    setError('');
 
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      // Parse tags
+      const tags = formData.tags
+        .split(',')
+        .map(tag => tag.trim())
+        .filter(tag => tag.length > 0);
+
+      // Create product in Firestore
+      const productId = await createProduct({
+        name: formData.name,
+        slug: formData.slug,
+        tagline: formData.shortDescription,
+        description: formData.description,
+        shortDescription: formData.shortDescription,
+        category: formData.category as any,
+        tags,
+        website: formData.websiteUrl,
+        websiteUrl: formData.websiteUrl,
+        logo: formData.logo || '',
+        userId: user.uid,
+        username: userData.username,
+        status: 'published',
+        featured: false,
+      });
+
+      console.log('Product created with ID:', productId);
+      
+      // Redirect to dashboard
       router.push('/dashboard');
-    }, 2000);
+    } catch (err) {
+      console.error('Error submitting product:', err);
+      setError(err instanceof Error ? err.message : 'Failed to submit product. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -87,6 +122,12 @@ export default function SubmitPage() {
         </div>
 
         <Card className="p-8 border-stone-200 bg-white">
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              {error}
+            </div>
+          )}
+          
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <Input
