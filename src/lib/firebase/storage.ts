@@ -57,12 +57,14 @@ export async function deleteFile(fileURL: string): Promise<void> {
 }
 
 /**
- * Validate image file
+ * Validate image file with security checks
  */
 export function validateImageFile(file: File): { valid: boolean; error?: string } {
-  const maxSize = 5 * 1024 * 1024; // 5MB
+  const maxSize = 2 * 1024 * 1024; // 2MB (reduced for security)
   const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'];
+  const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'svg'];
 
+  // Check MIME type
   if (!allowedTypes.includes(file.type)) {
     return {
       valid: false,
@@ -70,11 +72,53 @@ export function validateImageFile(file: File): { valid: boolean; error?: string 
     };
   }
 
+  // Check file size
   if (file.size > maxSize) {
     return {
       valid: false,
-      error: 'File size exceeds 5MB limit.',
+      error: 'File size exceeds 2MB limit.',
     };
+  }
+
+  // Security: Check for double extensions (e.g., logo.jpg.php, logo.png.exe)
+  const fileName = file.name.toLowerCase();
+  const parts = fileName.split('.');
+  
+  if (parts.length > 2) {
+    return { 
+      valid: false, 
+      error: 'Invalid filename. No double extensions allowed for security.' 
+    };
+  }
+
+  // Get file extension
+  const extension = parts[parts.length - 1];
+  
+  // Security: Validate extension
+  if (!allowedExtensions.includes(extension)) {
+    return { 
+      valid: false, 
+      error: `Invalid file extension. Allowed: ${allowedExtensions.join(', ')}` 
+    };
+  }
+
+  // Security: Check for suspicious patterns in filename
+  const suspiciousPatterns = [
+    /\.\./,           // Directory traversal
+    /%00/,            // Null byte injection
+    /[<>:"|?*]/,      // Invalid characters
+    /^\.+$/,          // Hidden files
+    /\s{2,}/,         // Multiple spaces
+    /[\x00-\x1f\x7f]/,// Control characters
+  ];
+
+  for (const pattern of suspiciousPatterns) {
+    if (pattern.test(fileName)) {
+      return { 
+        valid: false, 
+        error: 'Invalid filename. Contains suspicious characters.' 
+      };
+    }
   }
 
   return { valid: true };

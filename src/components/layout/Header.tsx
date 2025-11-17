@@ -63,14 +63,22 @@ export const Header: React.FC = () => {
                 Pricing
                 <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-600 group-hover:w-full transition-all duration-300'></span>
               </Link>
-              <Link href='/submit' className='text-sm font-medium text-gray-600 hover:text-orange-600 transition-colors relative group'>
-                Submit
+              <Link href='/past-launches' className='text-sm font-medium text-gray-600 hover:text-orange-600 transition-colors relative group'>
+                Past Launches
                 <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-600 group-hover:w-full transition-all duration-300'></span>
               </Link>
-              <Link href='/dashboard' className='text-sm font-medium text-gray-600 hover:text-orange-600 transition-colors relative group'>
-                Dashboard
-                <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-600 group-hover:w-full transition-all duration-300'></span>
-              </Link>
+              {user && (
+                <>
+                  <Link href='/submit' className='text-sm font-medium text-gray-600 hover:text-orange-600 transition-colors relative group'>
+                    Submit
+                    <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-600 group-hover:w-full transition-all duration-300'></span>
+                  </Link>
+                  <Link href='/dashboard' className='text-sm font-medium text-gray-600 hover:text-orange-600 transition-colors relative group'>
+                    Dashboard
+                    <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-600 group-hover:w-full transition-all duration-300'></span>
+                  </Link>
+                </>
+              )}
             </nav>
             
             {/* Actions */}
@@ -86,9 +94,6 @@ export const Header: React.FC = () => {
                     <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-pink-500 rounded-full flex items-center justify-center text-white text-sm font-medium shadow-lg">
                       {userData?.displayName?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase()}
                     </div>
-                    <span className="text-sm font-medium text-stone-700">
-                      {userData?.displayName || 'User'}
-                    </span>
                     <svg className={`w-4 h-4 text-stone-400 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
@@ -102,7 +107,7 @@ export const Header: React.FC = () => {
                       />
                       <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-stone-200 rounded-xl shadow-xl py-2 z-50">
                         <div className="px-4 py-3 border-b border-stone-100">
-                          <p className="text-sm font-semibold text-stone-900">{userData?.displayName || 'User'}</p>
+                          <p className="text-sm font-semibold text-stone-900">{userData?.displayName || user.email}</p>
                           <p className="text-xs text-stone-500 mt-0.5">{user.email}</p>
                           {userData?.isPremium && (
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-orange-100 to-pink-100 border border-orange-200 rounded-md text-xs font-medium text-orange-700 mt-2">
@@ -213,8 +218,13 @@ export const Header: React.FC = () => {
             <nav className='flex flex-col gap-4'>
               <Link href='/products' className='text-sm font-medium text-gray-600 hover:text-orange-600'>Products</Link>
               <Link href='/pricing' className='text-sm font-medium text-gray-600 hover:text-orange-600'>Pricing</Link>
-              <Link href='/submit' className='text-sm font-medium text-gray-600 hover:text-orange-600'>Submit</Link>
-              <Link href='/dashboard' className='text-sm font-medium text-gray-600 hover:text-orange-600'>Dashboard</Link>
+              <Link href='/past-launches' className='text-sm font-medium text-gray-600 hover:text-orange-600'>Past Launches</Link>
+              {user && (
+                <>
+                  <Link href='/submit' className='text-sm font-medium text-gray-600 hover:text-orange-600'>Submit</Link>
+                  <Link href='/dashboard' className='text-sm font-medium text-gray-600 hover:text-orange-600'>Dashboard</Link>
+                </>
+              )}
               <div className='flex flex-col gap-2 pt-4 border-t border-gray-100'>
                 {user ? (
                   <>

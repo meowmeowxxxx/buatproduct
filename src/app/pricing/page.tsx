@@ -22,7 +22,7 @@ const pricingPlans = [
       { text: 'Basic analytics (views & upvotes)', included: true },
       { text: 'Lifetime backlink (top 3 products)', included: true },
       { text: 'Edit your products anytime', included: true },
-      { text: 'Standard review (72 hours)', included: true },
+      { text: 'Standard review (48-72 hours)', included: true },
     ],
     cta: 'Start Free',
     ctaSubtext: 'No credit card required',
@@ -31,16 +31,17 @@ const pricingPlans = [
   {
     id: 'featured',
     name: 'Featured Product',
-    badge: '🔥 Best Value',
+    badge: '🔥 Limited to 5 Slots',
     badgeColor: 'bg-gradient-to-r from-orange-500 to-pink-500 text-white',
-    price: '$15',
+    price: '$19',
     originalPrice: null,
     period: 'per product',
     description: 'Get maximum visibility on the homepage for 15 days',
     features: [
+      { text: 'Only 5 featured slots available', included: true, highlight: true },
       { text: '15 days featured on homepage', included: true, highlight: true },
       { text: 'Premium "Featured" badge', included: true, highlight: true },
-      { text: 'Prominent placement above the fold', included: true, highlight: true },
+      { text: 'Prominent placement above the fold', included: true },
       { text: 'Priority in search results', included: true },
       { text: 'Fast-track review (24 hours)', included: true },
       { text: 'Featured in weekly newsletter', included: true },
@@ -50,29 +51,6 @@ const pricingPlans = [
     cta: 'Get Featured',
     ctaSubtext: 'One-time payment • 15 days visibility',
     popular: true,
-  },
-  {
-    id: 'premium',
-    name: 'Premium Unlimited',
-    badge: 'Best for Makers',
-    badgeColor: 'bg-gradient-to-r from-purple-600 to-pink-600 text-white',
-    price: '$49',
-    originalPrice: null,
-    period: 'lifetime',
-    description: 'Launch unlimited products with premium benefits',
-    features: [
-      { text: 'Submit unlimited products', included: true, highlight: true },
-      { text: 'Choose your launch dates', included: true, highlight: true },
-      { text: 'Relaunch products monthly', included: true, highlight: true },
-      { text: 'Priority support 24/7', included: true },
-      { text: 'Premium badges on all products', included: true },
-      { text: 'Advanced analytics for all products', included: true },
-      { text: 'Lifetime backlinks for all products', included: true },
-      { text: 'No recurring fees ever', included: true },
-    ],
-    cta: 'Get Premium Unlimited',
-    ctaSubtext: 'One-time payment • Lifetime access',
-    popular: false,
   },
 ];
 
@@ -121,8 +99,8 @@ export default function PricingPage() {
 
       {/* Pricing Cards */}
       <section className='py-16'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='grid md:grid-cols-3 gap-6 max-w-7xl mx-auto'>
+        <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='grid md:grid-cols-2 gap-8 max-w-4xl mx-auto'>
             {pricingPlans.map((plan) => (
               <div
                 key={plan.id}
@@ -201,29 +179,26 @@ export default function PricingPage() {
                   <th className='text-left py-4 px-4 text-sm font-semibold text-stone-900'>Feature</th>
                   <th className='text-center py-4 px-4 text-sm font-semibold text-stone-900'>Free</th>
                   <th className='text-center py-4 px-4 text-sm font-semibold text-orange-600'>Featured</th>
-                  <th className='text-center py-4 px-4 text-sm font-semibold text-purple-600'>Premium</th>
                 </tr>
               </thead>
               <tbody className='divide-y divide-stone-200'>
                 {[
-                  { feature: 'Product Submissions', free: '3 products', featured: 'Per product', premium: 'Unlimited' },
-                  { feature: 'Review Time', free: '72 hours', featured: '24 hours', premium: '24 hours' },
-                  { feature: 'Homepage Featured', free: '—', featured: '15 days', premium: '—' },
-                  { feature: 'Premium Badge', free: '—', featured: '✓', premium: '✓' },
-                  { feature: 'Community Upvotes', free: '✓', featured: '✓', premium: '✓' },
-                  { feature: 'Product Analytics', free: 'Basic', featured: 'Advanced', premium: 'Advanced' },
-                  { feature: 'Support', free: 'Community', featured: 'Priority', premium: 'Priority 24/7' },
-                  { feature: 'Newsletter Feature', free: '—', featured: '✓', premium: '✓' },
-                  { feature: 'Lifetime Backlinks', free: 'Top 3 only', featured: '✓', premium: '✓' },
-                  { feature: 'Relaunch Products', free: '—', featured: '—', premium: 'Monthly' },
-                  { feature: 'Choose Launch Date', free: '—', featured: '—', premium: '✓' },
-                  { feature: 'Price', free: 'Free', featured: '$15/product', premium: '$49 lifetime' },
+                  { feature: 'Product Submissions', free: '3 products', featured: 'Per product' },
+                  { feature: 'Review Time', free: '48-72 hours', featured: '24 hours' },
+                  { feature: 'Homepage Featured', free: '—', featured: '15 days' },
+                  { feature: 'Featured Slots', free: '—', featured: 'Limited to 5' },
+                  { feature: 'Premium Badge', free: '—', featured: '✓' },
+                  { feature: 'Community Upvotes', free: '✓', featured: '✓' },
+                  { feature: 'Product Analytics', free: 'Basic', featured: 'Advanced' },
+                  { feature: 'Support', free: 'Community', featured: 'Priority' },
+                  { feature: 'Newsletter Feature', free: '—', featured: '✓' },
+                  { feature: 'Lifetime Backlinks', free: 'Top 3 only', featured: '✓' },
+                  { feature: 'Price', free: 'Free', featured: '$19/product' },
                 ].map((row, index) => (
                   <tr key={index} className='hover:bg-stone-50 transition-colors'>
                     <td className='py-4 px-4 text-sm text-stone-700 font-medium'>{row.feature}</td>
                     <td className='py-4 px-4 text-sm text-center text-stone-600'>{row.free}</td>
                     <td className='py-4 px-4 text-sm text-center text-orange-600 font-medium'>{row.featured}</td>
-                    <td className='py-4 px-4 text-sm text-center text-purple-600 font-medium'>{row.premium}</td>
                   </tr>
                 ))}
               </tbody>
@@ -243,20 +218,20 @@ export default function PricingPage() {
           <div className='space-y-6'>
             {[
               {
-                question: 'What\'s the difference between Featured Product and Premium Unlimited?',
-                answer: 'Featured Product ($15) gives you 15 days of homepage visibility for a single product - great for individual launches. Premium Unlimited ($49) is a one-time lifetime payment that lets you submit unlimited products forever with premium benefits on all of them.',
+                question: 'How does the Featured Product plan work?',
+                answer: 'Featured Product ($19) gives you 15 days of homepage visibility for a single product. Your product gets a premium badge, priority positioning, newsletter feature, and advanced analytics. Only 5 featured slots are available to ensure maximum visibility for each product.',
               },
               {
-                question: 'Can I upgrade from Free to Featured or Premium later?',
-                answer: 'Absolutely! You can start with the Free plan and upgrade any product to Featured ($15 for 15 days of homepage visibility) anytime. Or purchase Premium Unlimited ($49 lifetime) to unlock unlimited submissions.',
+                question: 'Can I upgrade from Free to Featured later?',
+                answer: 'Absolutely! You can start with the Free plan (3 products, 48-72 hour review) and upgrade any product to Featured ($19 for 15 days of homepage visibility) anytime. Featured products get 24-hour priority review.',
               },
               {
-                question: 'How does the 15-day featured placement work?',
-                answer: 'When you purchase Featured Product ($15), your product will be prominently displayed on the homepage for 15 consecutive days starting from your launch date. You\'ll get maximum visibility including newsletter features and priority positioning.',
+                question: 'Why are there only 5 featured slots available?',
+                answer: 'We limit featured slots to 5 products at a time to ensure each featured product gets maximum visibility and engagement. This scarcity drives better results for featured products compared to unlimited featured listings.',
               },
               {
-                question: 'Is Premium Unlimited really lifetime access?',
-                answer: 'Yes! Premium Unlimited is a one-time payment of $49 that gives you lifetime access. You can submit unlimited products forever, relaunch monthly, choose your launch dates, and access all premium features with no recurring fees.',
+                question: 'What happens after the 15-day featured period ends?',
+                answer: 'Your product remains on BuatProduct permanently with a lifetime backlink. After 15 days, it moves from the featured section to the regular listings where it continues to receive organic traffic and upvotes from the community.',
               },
               {
                 question: 'What payment methods do you accept?',
@@ -264,7 +239,7 @@ export default function PricingPage() {
               },
               {
                 question: 'Can I get a refund?',
-                answer: 'We offer a 7-day money-back guarantee on Featured Product and Premium Unlimited purchases. If you\'re not satisfied, contact us within 7 days for a full refund.',
+                answer: 'We offer a 7-day money-back guarantee on Featured Product purchases. If you\'re not satisfied with the results, contact us within 7 days for a full refund.',
               },
             ].map((faq, index) => (
               <div key={index} className='bg-stone-50 border border-stone-200 rounded-xl p-6'>

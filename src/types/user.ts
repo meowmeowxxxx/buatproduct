@@ -13,9 +13,9 @@ export interface User {
   twitter?: string;
   role: UserRole;
   
-  // Premium Unlimited Plan ($49 lifetime)
-  isPremium: boolean; // Has Premium Unlimited access
-  premiumSince?: Timestamp; // When they purchased Premium Unlimited
+  // Premium features (for featured products only)
+  isPremium: boolean; // Reserved for future use
+  premiumSince?: Timestamp; // Reserved for future use
   
   productCount: number;
   subscriptionEndDate?: Timestamp;

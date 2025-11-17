@@ -143,7 +143,7 @@ export default function ProfilePage() {
                   {userData?.displayName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase()}
                 </div>
                 <div className="mb-2">
-                  <h2 className="text-2xl font-bold text-stone-900">{userData?.displayName || 'User'}</h2>
+                  <h2 className="text-2xl font-bold text-stone-900">{userData?.displayName || user?.email?.split('@')[0]}</h2>
                   <p className="text-stone-600">@{userData?.username}</p>
                 </div>
               </div>
@@ -326,11 +326,9 @@ export default function ProfilePage() {
               {!userData?.isPremium && (
                 <Button
                   size="sm"
-                  className="bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600"
-                  onClick={handleUpgradeToPremium}
-                  isLoading={isUpgrading}
+                  onClick={() => router.push('/pricing')}
                 >
-                  Upgrade to Premium
+                  View Plans
                 </Button>
               )}
             </div>
