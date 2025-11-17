@@ -2,20 +2,47 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { signUp } from '@/lib/firebase/auth';
 
 export default function SignupPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
+    username: '',
     email: '',
     password: '',
     agreeToTerms: false,
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Signup form submitted:', formData);
+    setError('');
+    
+    if (!formData.agreeToTerms) {
+      setError('Please agree to the Terms of Service and Privacy Policy');
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await signUp(formData.email, formData.password, formData.username || formData.name.toLowerCase().replace(/\s+/g, ''), formData.name);
+      router.push('/');
+    } catch (err: any) {
+      setError(err.message || 'Failed to create account. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -39,6 +66,12 @@ export default function SignupPage() {
         </div>
 
         <div className='bg-white border border-stone-200 rounded-xl p-8 shadow-sm'>
+          {error && (
+            <div className='mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600'>
+              {error}
+            </div>
+          )}
+          
           <form onSubmit={handleSubmit} className='space-y-5'>
             <div>
               <label htmlFor='name' className='block text-sm font-medium text-stone-700 mb-1.5'>
@@ -51,8 +84,27 @@ export default function SignupPage() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
+                disabled={loading}
                 className='w-full border-stone-300 focus:border-orange-400 focus:ring-orange-400'
               />
+            </div>
+
+            <div>
+              <label htmlFor='username' className='block text-sm font-medium text-stone-700 mb-1.5'>
+                Username
+              </label>
+              <Input
+                id='username'
+                type='text'
+                placeholder='johndoe'
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                disabled={loading}
+                className='w-full border-stone-300 focus:border-orange-400 focus:ring-orange-400'
+              />
+              <p className='text-xs text-stone-500 mt-1.5'>
+                Leave blank to auto-generate from name
+              </p>
             </div>
 
             <div>
@@ -66,6 +118,7 @@ export default function SignupPage() {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
+                disabled={loading}
                 className='w-full border-stone-300 focus:border-orange-400 focus:ring-orange-400'
               />
             </div>
@@ -77,10 +130,11 @@ export default function SignupPage() {
               <Input
                 id='password'
                 type='password'
-                placeholder=''
+                placeholder='••••••••'
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
+                disabled={loading}
                 className='w-full border-stone-300 focus:border-orange-400 focus:ring-orange-400'
               />
               <p className='text-xs text-stone-500 mt-1.5'>
@@ -111,9 +165,10 @@ export default function SignupPage() {
 
                         <Button
               type='submit'
+              disabled={loading}
               className='w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white py-2.5 shadow-lg shadow-orange-500/30'
             >
-              Create account
+              {loading ? 'Creating account...' : 'Create account'}
             </Button>
           </form>
         </div>

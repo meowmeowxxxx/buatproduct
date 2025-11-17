@@ -2,19 +2,34 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { signIn } from '@/lib/firebase/auth';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     rememberMe: false,
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login form submitted:', formData);
+    setError('');
+    setLoading(true);
+
+    try {
+      await signIn(formData.email, formData.password);
+      router.push('/');
+    } catch (err: any) {
+      setError(err.message || 'Failed to sign in. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,6 +53,12 @@ export default function LoginPage() {
         </div>
 
         <div className='bg-white border border-stone-200 rounded-xl p-8 shadow-sm'>
+          {error && (
+            <div className='mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600'>
+              {error}
+            </div>
+          )}
+          
           <form onSubmit={handleSubmit} className='space-y-5'>
             <div>
               <label htmlFor='email' className='block text-sm font-medium text-stone-700 mb-1.5'>
@@ -50,6 +71,7 @@ export default function LoginPage() {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
+                disabled={loading}
                 className='w-full border-stone-300 focus:border-orange-400 focus:ring-orange-400'
               />
             </div>
@@ -61,10 +83,11 @@ export default function LoginPage() {
               <Input
                 id='password'
                 type='password'
-                placeholder=''
+                placeholder='••••••••'
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
+                disabled={loading}
                 className='w-full border-stone-300 focus:border-orange-400 focus:ring-orange-400'
               />
             </div>
@@ -76,6 +99,7 @@ export default function LoginPage() {
                   type='checkbox'
                   checked={formData.rememberMe}
                   onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
+                  disabled={loading}
                   className='h-4 w-4 rounded border-stone-300 text-orange-500 focus:ring-orange-400'
                 />
                 <label htmlFor='remember' className='text-xs text-stone-600'>
@@ -89,9 +113,10 @@ export default function LoginPage() {
 
             <Button
               type='submit'
+              disabled={loading}
               className='w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white py-2.5 shadow-lg shadow-orange-500/30'
             >
-              Sign in
+              {loading ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
         </div>
