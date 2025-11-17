@@ -34,7 +34,10 @@ service cloud.firestore {
                     request.resource.data.email is string &&
                     request.resource.data.username is string &&
                     request.resource.data.displayName is string &&
-                    request.resource.data.role == 'user'; // New users must be 'user' role
+                    request.resource.data.role == 'user' && // New users must be 'user' role
+                    request.resource.data.isPremium is bool &&
+                    request.resource.data.productCount is int &&
+                    request.resource.data.emailVerified is bool;
       allow update: if isOwner(userId) || isAdmin();
       allow delete: if isAdmin();
     }
